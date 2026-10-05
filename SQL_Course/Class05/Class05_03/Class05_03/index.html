@@ -1,0 +1,5751 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Data Wrangling & Visualization">
+      
+      
+      
+        <link rel="canonical" href="https://NavigationBA.github.io/Navigation_DWV/SQL_Course/Class05/Class05_03/Class05_03/">
+      
+      
+        <link rel="prev" href="../../Class05_02/Class05_02/">
+      
+      
+        <link rel="next" href="../../Class05_04/Class05_04/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>✅ Class 5.3 - SQL 中的日期时间运算 - Data Wrangling & Visualization</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#class-53-sql" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="Data Wrangling &amp; Visualization" class="md-header__button md-logo" aria-label="Data Wrangling & Visualization" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Data Wrangling & Visualization
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ✅ Class 5.3 - SQL 中的日期时间运算
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue"  aria-label="切换主题"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换主题" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="blue"  aria-label="切换主题"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换主题" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../Topics/Topic01/Topic01_00/Topic01_00/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../Class01/Class01_00/Class01_00/" class="md-tabs__link">
+          
+  
+  
+  SQL Course
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../Tutorials/Topic01/Tut01_01/Tut01_01/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../Quiz/Topic01/Quiz01/" class="md-tabs__link">
+          
+  
+  
+  Quiz
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../Assignments/Muesli/Introduction/Introduction/" class="md-tabs__link">
+          
+  
+  
+  Assignments
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../Practice/Topic00/Practice00_01/Practice00_01/" class="md-tabs__link">
+          
+  
+  
+  Practice Question
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Data Wrangling &amp; Visualization" class="md-nav__button md-logo" aria-label="Data Wrangling & Visualization" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Data Wrangling & Visualization
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Topic01_00/Topic01_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Topic 1 Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Topic01_01/Topic01_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 1.1 - Data Analysis & Decision Making
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Topic01_02/Topic01_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 1.2 - Database Systems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Topic01_03/Topic01_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 1.3 - SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Topic01_04/Topic01_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 1.4 - Data Quality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic01/Extension01_01/Extension01_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ☑️ Topic 1 Extension 1 - Evidence-Based Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 2 - Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 2 - Data Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Topic02_00/Topic02_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Topic 2 Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Topic02_01/Topic02_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 2.1 - Data Visualization Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Topic02_02/Topic02_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 2.2 - Evaluating Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Topic02_03/Topic02_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 2.3 - Designing Interactive Dashboards & Periodic Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Extension02_01/Extension02_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ☑️ Topic 2 Extension 1 - Financial Times Visual Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Extension02_02/Extension02_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ☑️ Topic 2 Extension 2 - Evergreen's Data Visualization Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic02/Extension02_03/Extension02_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ☑️ Topic 2 Extension 3 - International Business Communication Standards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 3 - Data Analysis with Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 3 - Data Analysis with Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic03/Topic03_00/Topic03_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Topic 3 Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic03/Topic03_01/Topic03_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 3.1 - Python for General Purpose Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Topics/Topic03/Topic03_02/Topic03_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Topic 3.2 - Special Techniques in Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SQL Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 1 - 数据库与 SQL 基础知识
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 1 - 数据库与 SQL 基础知识
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class01/Class01_00/Class01_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 1 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class01/Class01_01/Class01_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 1.1 - 数据库与 SQL 语言简介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class01/Class01_02/Class01_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 1.2 - 本课程使用的数据库 - Chinook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 2 - SQL 基础查询
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 2 - SQL 基础查询
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class02/Class02_00/Class02_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 2 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class02/Class02_01/Class02_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 2.1 - SELECT 与 FROM 语句
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class02/Class02_02/Class02_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 2.2 - WHERE 条件过滤
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class02/Class02_03/Class02_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 2.3 - ORDER BY 语句数据排序与 TOP 结果限制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class02/Class02_04/Class02_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 2.4 - GROUP BY 语句与数据聚合运算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 3 - SQL 表连接与表拼接
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 3 - SQL 表连接与表拼接
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_00/Class03_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 3 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_01/Class03_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 3.1 - 表连接的基本概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_02/Class03_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 3.2 - 表连接的基本类型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_03/Class03_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 3.3 - 表连接的特殊情景
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_04/Class03_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 3.4 - 表连接的其他类型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class03/Class03_05/Class03_05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 3.5 - 表拼接
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 4 - SQL 中的嵌套结构
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 4 - SQL 中的嵌套结构
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class04/Class04_00/Class04_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 4 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class04/Class04_01/Class04_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 4.1 - 公共表达式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class04/Class04_02/Class04_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 4.2 - 子查询
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 5 - SQL 中的进阶数据运算
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 5 - SQL 中的进阶数据运算
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Class05_00/Class05_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 5 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Class05_01/Class05_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.1 - SQL 中的数值运算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Class05_02/Class05_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.2 - SQL 中的字符串运算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.3 - SQL 中的日期时间运算
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.3 - SQL 中的日期时间运算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Content">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Content
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 日期时间的基本概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SQL 中的日期时间运算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. SQL 中的日期时间运算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (1) 日期时间的部分提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (2) 日期时间的组合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (3) 日期时间的颗粒度截断
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (4) 日期时间的加减运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (5) 日期时间的差值计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (6) 日期时间的格式化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (7) 时间日期的比较
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 日期时间操作小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Class05_04/Class05_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.4 - SQL 中数据类型之间的转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Class05_05/Class05_05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 5.5 - SQL 中的 Null 值处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class 6 - SQL 中的窗口函数
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Class 6 - SQL 中的窗口函数
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_00/Class06_00/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✴️ Class 6 - 章节大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_01/Class06_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 6.1 - SQL 中的滑动窗口函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_02/Class06_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 6.2 - SQL 中的扩展窗口函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_03/Class06_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 6.3 - SQL 中的分组窗口函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_04/Class06_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 6.4 - SQL 中的分组滑动与分组扩展窗口函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Class06/Class06_05/Class06_05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ Class 6.5 - 窗口函数中的进阶计算函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_01/Tut01_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.1 - The Misconnecting Passengers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_02/Tut01_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.2 - ERD & SQL - Movie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_03/Tut01_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.3 - ERD & SQL - GetGoing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_04/Tut01_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.4 - ERD & SQL - Airline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_05/Tut01_05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.5 - ERD & SQL - HSX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic01/Tut01_06/Tut01_06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 1.6 - ERD & SQL - Global Bike
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 2 - Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 2 - Data Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic02/Tut02_01/Tut02_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 2.1 - Evaluating Data Visualization 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic02/Tut02_02/Tut02_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 2.2 - Evaluating Data Visualization 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic02/Tut02_03/Tut02_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 2.3 - Evaluating Data Visualization 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic02/Tut02_04/Tut02_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 2.4 - Evaluating Data Visualization 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 3 - Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 3 - Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic03/Tut03_01/Tut03_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 3.1 - Python - Muesli Costing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic03/Tut03_02/Tut03_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 3.2 - Python - Muesli Costing Using Historical Costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic03/Tut03_03/Tut03_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 3.3 - Python - Muesli Production Efficiency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tutorials/Topic03/Tut03_04/Tut03_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Tutorial 3.4 - Python - Simulating Snakes and Ladders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quiz
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Quiz
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 1
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Quiz/Topic01/Quiz01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Quiz 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 2
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 2
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Quiz/Topic02/Quiz02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Quiz 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 3
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 3
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Quiz/Topic03/Quiz03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Quiz 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assignments
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Assignments
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assignments - Muesli
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Assignments - Muesli
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/Introduction/Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/ERD1/ERD1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - ERD & SQL 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/ERD2/ERD2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - ERD & SQL 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/ERD3/ERD3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - ERD & SQL 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/Python1/Python1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - Python 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Assignments/Muesli/Python2/Python2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📝 Muesli - Python 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Practice Question
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Practice Question
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    General Questions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    General Questions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_01/Practice00_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.1 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_02/Practice00_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.2 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_03/Practice00_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.3 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_04/Practice00_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.4 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_05/Practice00_05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.5 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_06/Practice00_06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.6 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic00/Practice00_07/Practice00_07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 0.7 - General Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 1 - Data & Business Decision Making
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic01/Practice01_01/Practice01_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 1.1 - ERD & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic01/Practice01_02/Practice01_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 1.2 - ERD & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic01/Practice01_03/Practice01_03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 1.3 - ERD & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic01/Practice01_04/Practice01_04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 1.4 - ERD & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 2 - Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 2 - Data Visualization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic02/Practice02_01/Practice02_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 2.1 - Evaluating Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic02/Practice02_02/Practice02_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 2.2 - Evaluating Data Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topic 3 - Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topic 3 - Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic03/Practice03_01/Practice03_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 3.1 - Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Practice/Topic03/Practice03_02/Practice03_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✏️ Practice 3.2 - Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Content">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Content
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 日期时间的基本概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SQL 中的日期时间运算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. SQL 中的日期时间运算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (1) 日期时间的部分提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (2) 日期时间的组合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (3) 日期时间的颗粒度截断
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (4) 日期时间的加减运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (5) 日期时间的差值计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (6) 日期时间的格式化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (7) 时间日期的比较
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 日期时间操作小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="class-53-sql">Class 5.3 - SQL 中的日期时间运算<a class="headerlink" href="#class-53-sql" title="Permanent link">&para;</a></h1>
+<h2 id="1">1. 日期时间的基本概念<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>首先，我们来介绍一下时间日期类型的数据：</p>
+<ul>
+<li>时间日期在 SQL 中是一种特殊格式，类似于我们在 Python 中给大家拓展的 <code>datetime</code> 模块中的 <code>datetime</code> 对象</li>
+<li>时间日期类型本质上来说就是时间戳，只不过展示出来是 <code>'YYYY-MM-DD HH:MM:SS.mmm'</code> 这种格式</li>
+</ul>
+<p>在 SQL 中，获取当前时间可以有以下两个方法：</p>
+<ul>
+<li><code>GETDATE()</code> 函数：返回当前的日期和时间，格式为 <code>'YYYY-MM-DD HH:MM:SS.mmm'</code></li>
+<li><code>CURRENT_TIMESTAMP</code> 关键字：返回当前的日期和时间，格式同样为 <code>'YYYY-MM-DD HH:MM:SS.mmm'</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">GETDATE</span><span class="p">()</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">CurrentDateTime1</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">CurrentDateTime2</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>================================================
+
+CurrentDateTime1         CurrentDateTime2       
+-----------------------  -----------------------
+2026-03-19 05:44:03.210  2026-03-19 05:44:03.210
+(1 row affected)
+</code></pre></div>
+<p>注意，<code>GETDATE()</code> 和 <code>CURRENT_TIMESTAMP</code> 这两个函数返回的当前时间都是基于数据库服务器所在的时区的当前时间，而不是客户端的当前时间</p>
+<ul>
+<li>然而，大部分人在部署数据库的时候，并不会特别去设置数据库服务器所在时区</li>
+<li>因此导致获取到的当前时间全部是世界标准时间（UTC 时间），而不是我们所在时区的当前时间</li>
+<li>这样做其实问题不大，因为他们数据库中的时间字段也都是基于 UTC 时间的，所以他们在进行日期时间的计算的时候，都是基于 UTC 时间来进行计算的，这样就不会有偏差</li>
+<li>
+<p>例如：</p>
+<ul>
+<li>一家经营在澳大利亚的公司，有一笔订单是澳大利亚东部时间的 <code>2024-01-07 09:00:00.000</code>，</li>
+<li>这笔订单跑到数据库中，就会被转换成 UTC 时间的 <code>2024-01-06 22:00:00.000</code>，</li>
+<li>这家公司随后分析 <code>2024-01-07</code> 这一天的订单信息，筛选出订单日期在 <code>2024-01-07 00:00:00.000</code> 和 <code>2024-01-07 23:59:59.999</code> 之间的订单</li>
+<li>实际上是在筛选 UTC 时间在 <code>2024-01-06 14:00:00.000</code> 和 <code>2024-01-07 13:59:59.999</code> 之间的订单</li>
+<li>事实上我们前面提到这笔订单在 UTC 时间是 <code>2024-01-06 22:00:00.000</code>，在这个 UTC 时间范围内，所以它就会被正确地筛选出来</li>
+<li>这样在数据库中，和数据分析中，完全不考虑时区问题，只有在展示给用户的时候，才换算成用户所在时区的时间</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-sql">2. SQL 中的日期时间运算<a class="headerlink" href="#2-sql" title="Permanent link">&para;</a></h2>
+<h3 id="1_1">(1) 日期时间的部分提取<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p>日期时间的部分提取，指的是从一个日期时间类型的字段中提取出年、月、日、小时、分钟、秒等等这些部分来：</p>
+<ul>
+<li>
+<p>在 Azure SQL Database 中，我们使用 <code>DATEPART(part, date)</code> 函数来提取日期时间的部分，返回的都是整数形式</p>
+</li>
+<li>
+<p>除此之外，还有一个 <code>DATENAME(part, date)</code> 函数也可以用来提取日期时间的部分，返回的都是字符串形式</p>
+</li>
+<li>
+<p>这两个函数中，<code>part</code> 参数用来指定要提取的部分，常见的提取部分有：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>part</th>
+<th>等价缩写</th>
+<th>描述</th>
+<th>举例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YEAR</code></td>
+<td><code>yy</code> 或 <code>yyyy</code></td>
+<td>提取年份</td>
+<td><code>2024-12-31 10:12:30.567</code> 的年份部分是 <code>2024</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>QUARTER</code></td>
+<td><code>qq</code> 或 <code>q</code></td>
+<td>提取季度</td>
+<td><code>2024-12-31 10:12:30.567</code> 的季度部分是 <code>4</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MONTH</code></td>
+<td><code>mm</code> 或 <code>m</code></td>
+<td>提取月份</td>
+<td><code>2024-12-31 10:12:30.567</code> 的月份部分是 <code>12</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DAY</code></td>
+<td><code>dd</code> 或 <code>d</code></td>
+<td>提取日</td>
+<td><code>2024-12-31 10:12:30.567</code> 的日部分是 <code>31</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DAYOFYEAR</code></td>
+<td><code>dy</code> 或 <code>y</code></td>
+<td>提取一年中的第几天</td>
+<td><code>2024-12-31 10:12:30.567</code> 的年份中的第几天部分是 <code>366</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WEEK</code></td>
+<td><code>wk</code> 或 <code>ww</code></td>
+<td>提取一年中的第几周</td>
+<td><code>2024-12-31 10:12:30.567</code> 的年份中的第几周部分是 <code>1</code></td>
+<td>国际惯例，一年中最后一周如果跨年了，那么它属于下一年第一周</td>
+</tr>
+<tr>
+<td><code>WEEKDAY</code></td>
+<td></td>
+<td>提取星期几</td>
+<td><code>2024-12-31</code> 是周二，但是函数会返回 <code>3</code></td>
+<td>SQL Server 默认：<code>Sunday = 1</code></td>
+</tr>
+<tr>
+<td><code>HOUR</code></td>
+<td><code>hh</code></td>
+<td>提取小时</td>
+<td><code>2024-12-31 10:12:30.567</code> 的小时部分是 <code>10</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MINUTE</code></td>
+<td><code>mi</code> 或 <code>n</code></td>
+<td>提取分钟</td>
+<td><code>2024-12-31 10:12:30.567</code> 的分钟部分是 <code>12</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SECOND</code></td>
+<td><code>ss</code> 或 <code>s</code></td>
+<td>提取秒</td>
+<td><code>2024-12-31 10:12:30.567</code> 的秒部分是 <code>30</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MILLISECOND</code></td>
+<td><code>ms</code></td>
+<td>提取毫秒</td>
+<td><code>2024-12-31 10:12:30.567</code> 的毫秒部分是 <code>567</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我们在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上提取日期时间的部分：</p>
+<ul>
+<li>首先，我们来使用 <code>DATEPART</code> 函数来提取日期时间的部分，返回整数形式</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceYear</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取年份</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMonth</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取月份</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">QUARTER</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceQuarter</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取季度</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceWeek</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取一年中的第几周</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">WEEKDAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceWeekday</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取星期几</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceDay</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取日</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">HOUR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceHour</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取小时</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">MINUTE</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMinute</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取分钟</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">SECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceSecond</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取秒</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">MILLISECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMillisecond</span><span class="w"> </span><span class="c1">-- 提取毫秒</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>======================================================================================================================================================================================
+
+InvoiceId   InvoiceDate              InvoiceYear  InvoiceMonth  InvoiceQuarter  InvoiceWeek  InvoiceWeekday  InvoiceDay  InvoiceHour  InvoiceMinute  InvoiceSecond  InvoiceMillisecond
+----------  -----------------------  -----------  ------------  --------------  -----------  --------------  ----------  -----------  -------------  -------------  ------------------
+1           2021-01-01 00:00:00.000  2021         1             1               1            6               1           0            0              0              0                 
+2           2021-01-02 00:00:00.000  2021         1             1               1            7               2           0            0              0              0                 
+3           2021-01-03 00:00:00.000  2021         1             1               2            1               3           0            0              0              0                 
+4           2021-01-06 00:00:00.000  2021         1             1               2            4               6           0            0              0              0                 
+5           2021-01-11 00:00:00.000  2021         1             1               3            2               11          0            0              0              0                 
+(5 rows affected)
+</code></pre></div>
+<ul>
+<li>接着，我们再来使用 <code>DATENAME</code> 函数来提取日期时间的部分，返回字符串形式</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceYear</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取年份</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMonth</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取月份</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="n">QUARTER</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceQuarter</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取季度</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceWeek</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取一年中的第几周</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="n">WEEKDAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceWeekday</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取星期几</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceDay</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取日</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="n">HOUR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceHour</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取小时</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="k">MINUTE</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMinute</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取分钟</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="k">SECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceSecond</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 提取秒</span>
+<span class="w">    </span><span class="n">DATENAME</span><span class="p">(</span><span class="n">MILLISECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">InvoiceMillisecond</span><span class="w"> </span><span class="c1">-- 提取毫秒</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>======================================================================================================================================================================================
+
+InvoiceId   InvoiceDate              InvoiceYear  InvoiceMonth  InvoiceQuarter  InvoiceWeek  InvoiceWeekday  InvoiceDay  InvoiceHour  InvoiceMinute  InvoiceSecond  InvoiceMillisecond
+----------  -----------------------  -----------  ------------  --------------  -----------  --------------  ----------  -----------  -------------  -------------  ------------------
+1           2021-01-01 00:00:00.000  2021         January       1               1            Friday          1           0            0              0              0                 
+2           2021-01-02 00:00:00.000  2021         January       1               1            Saturday        2           0            0              0              0                 
+3           2021-01-03 00:00:00.000  2021         January       1               2            Sunday          3           0            0              0              0                 
+4           2021-01-06 00:00:00.000  2021         January       1               2            Wednesday       6           0            0              0              0                 
+5           2021-01-11 00:00:00.000  2021         January       1               3            Monday          11          0            0              0              0                 
+(5 rows affected)
+</code></pre></div>
+<p>这里我们注意一个特例，那就是日期在是本周的第几天：</p>
+<ul>
+<li>这个函数的返回值是基于 SQL Server 的默认设置的，也就是说一周的第一天是周日</li>
+<li>所以如果日期是周日，那么它会返回 1，如果日期是周一，那么它会返回 2，以此类推，如果日期是周六，那么它会返回 7</li>
+<li>
+<p>如果想转换为一周的第一天是周一，那么只需用取余运算即可：</p>
+<ul>
+<li>周日原值是 1，我们减 1 再除 7 取余数是 0</li>
+<li>周一原值是 2，我们减 1 再除 7 取余数是 1</li>
+<li>...</li>
+<li>周六原值是 7，我们减 1 再除 7 取余数是 6</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">DATEPART</span><span class="p">(</span><span class="n">WEEKDAY</span><span class="p">,</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">OriginalWeekday</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 原值</span>
+<span class="w">    </span><span class="p">(</span><span class="n">DATEPART</span><span class="p">(</span><span class="n">WEEKDAY</span><span class="p">,</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">AdjustedWeekday</span><span class="w"> </span><span class="c1">-- 调整后值</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>========================================
+
+OriginalWeekday  AdjustedWeekday
+---------------  ---------------
+3                2              
+(1 row affected)
+</code></pre></div>
+<h3 id="2">(2) 日期时间的组合<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<p>上面我们介绍了，可以将日期时间的部分提取出来，那么我们也可以根据部分来组合成一个新的日期时间。</p>
+<p>在 Azure SQL Database 中，我们可以以下两个函数，将整数形式的日期时间部分组合成一个新的日期时间：</p>
+<ul>
+<li><code>DATETIMEFROMPARTS(year, month, day, hour, minute, second, millisecond)</code> 来构成一个新的日期时间</li>
+<li><code>DATEFROMPARTS(year, month, day)</code> 来构成一个新的日期，这个函数会将小时、分钟、秒和毫秒都设置为 0</li>
+</ul>
+<p>这两个函数的一个常用情景就是重构日期时间，例如我们有一个日期时间 <code>2024-12-31 10:12:30.567</code></p>
+<ul>
+<li>我们如果想把它具体到日，那么我们就可以使用 <code>DATEFROMPARTS(DATEPART(YEAR, date), DATEPART(MONTH, date), DATEPART(DAY, date))</code> 来重构这个日期时间，这样就得到了 <code>2024-12-31 00:00:00.000</code> 这个日期时间</li>
+<li>我们如果想把它具体到月，那么我们就可以使用 <code>DATEFROMPARTS(DATEPART(YEAR, date), DATEPART(MONTH, date), 1)</code> 来重构这个日期时间，这样就得到了 <code>2024-12-01 00:00:00.000</code> 这个日期时间</li>
+</ul>
+<p>我们来在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上使用 <code>DATETIMEFROMPARTS</code> 函数来进行日期时间的组合：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="n">DATEPART</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">),</span><span class="w"> </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">),</span><span class="w"> </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ReconstructedToDay</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 重构到日</span>
+<span class="w">    </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="n">DATEPART</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">),</span><span class="w"> </span><span class="n">DATEPART</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ReconstructedToMonth</span><span class="w"> </span><span class="c1">-- 重构到月</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>=============================================================================
+
+InvoiceId   InvoiceDate              ReconstructedToDay  ReconstructedToMonth
+----------  -----------------------  ------------------  --------------------
+1           2021-01-01 00:00:00.000  2021-01-01          2021-01-01          
+2           2021-01-02 00:00:00.000  2021-01-02          2021-01-01          
+3           2021-01-03 00:00:00.000  2021-01-03          2021-01-01          
+4           2021-01-06 00:00:00.000  2021-01-06          2021-01-01          
+5           2021-01-11 00:00:00.000  2021-01-11          2021-01-01          
+(5 rows affected)
+</code></pre></div>
+<h3 id="3">(3) 日期时间的颗粒度截断<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>上面我们提到，<code>DATEFROMPARTS</code> 和 <code>DATEPART</code> 这两个函数的一个常用情景就是重构日期时间，但是这种重构的方式太麻烦了，我们接下来介绍一个简单直白的方式来进行日期时间的重构，就是颗粒度截断。</p>
+<p>日期时间的颗粒度截断，指的是将一个日期时间具体到某个颗粒度上进行截断，例如具体到年、月、日、小时等等：</p>
+<ul>
+<li>
+<p>它和日期时间的部分提取不同，例如 <code>2024-12-31 10:12:30.567</code> 这个日期时间：</p>
+<ul>
+<li>如果我们按照日的颗粒度进行截断，那么它的结果是 <code>2024-12-31 00:00:00.000</code> 它依然是一个日期时间类型的值</li>
+<li>如果我们提取日的部分，那么它的结果是 <code>31</code></li>
+</ul>
+</li>
+<li>
+<p>其实本质上来讲，就是在找一个日期时间的起始时间点</p>
+<ul>
+<li>例如 <code>2024-12-31 10:12:30.567</code> 这个日期时间，如果我们按照月的颗粒度进行截断，那么它的结果是 <code>2024-12-01 00:00:00.000</code></li>
+<li>这个日期时间就是 <code>2024-12-31 10:12:30.567</code> 这个日期时间所在的月份的起始时间点</li>
+</ul>
+</li>
+</ul>
+<p>在 Azure SQL Database 中，我们可以使用 <code>DATETRUNC</code> 函数来进行日期时间的颗粒度截断，语法是 <code>DATETRUNC(part, date)</code></p>
+<ul>
+<li>这个函数返回的结果依然是一个日期时间类型的值</li>
+<li>这个函数中 <code>part</code> 参数用来指定要截断的颗粒度，常见的颗粒度有：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>part</th>
+<th>等价缩写</th>
+<th>描述</th>
+<th>举例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YEAR</code></td>
+<td><code>yy</code> 或 <code>yyyy</code></td>
+<td>按年截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按年截断的结果是 <code>2024-01-01 00:00:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>QUARTER</code></td>
+<td><code>qq</code> 或 <code>q</code></td>
+<td>按季度截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按季度截断的结果是 <code>2024-10-01 00:00:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MONTH</code></td>
+<td><code>mm</code> 或 <code>m</code></td>
+<td>按月截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按月截断的结果是 <code>2024-12-01 00:00:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WEEK</code></td>
+<td><code>wk</code> 或 <code>ww</code></td>
+<td>按周截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按周截断的结果是 <code>2024-12-29 00:00:00.000</code></td>
+<td>SQL SERVER 中一周的起始是周日</td>
+</tr>
+<tr>
+<td><code>DAY</code></td>
+<td><code>dd</code> 或 <code>d</code></td>
+<td>按日截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按日截断的结果是 <code>2024-12-31 00:00:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>HOUR</code></td>
+<td><code>hh</code></td>
+<td>按小时截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按小时截断的结果是 <code>2024-12-31 10:00:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MINUTE</code></td>
+<td><code>mi</code> 或 <code>n</code></td>
+<td>按分钟截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按分钟截断的结果是 <code>2024-12-31 10:12:00.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SECOND</code></td>
+<td><code>ss</code> 或 <code>s</code></td>
+<td>按秒截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按秒截断的结果是 <code>2024-12-31 10:12:30.000</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MILLISECOND</code></td>
+<td><code>ms</code></td>
+<td>按毫秒截断</td>
+<td><code>2024-12-31 10:12:30.567</code> 按毫秒截断的结果是 <code>2024-12-31 10:12:30.567</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我们接下来，在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上使用 <code>DATETRUNC</code> 函数来进行日期时间的颗粒度截断：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToYear</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按年截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">QUARTER</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToQuarter</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按季度截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToMonth</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按月截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToWeek</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按周截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToDay</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按日截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">HOUR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToHour</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按小时截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="k">MINUTE</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToMinute</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按分钟截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="k">SECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToSecond</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 按秒截断</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">MILLISECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TruncatedToMillisecond</span><span class="w"> </span><span class="c1">-- 按毫秒截断</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>====================================================================================================================================================================================================================================================================
+
+InvoiceId   InvoiceDate              TruncatedToYear          TruncatedToQuarter       TruncatedToMonth         TruncatedToWeek          TruncatedToDay           TruncatedToHour          TruncatedToMinute        TruncatedToSecond        TruncatedToMillisecond 
+----------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------
+1           2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2020-12-27 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000
+2           2021-01-02 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2020-12-27 00:00:00.000  2021-01-02 00:00:00.000  2021-01-02 00:00:00.000  2021-01-02 00:00:00.000  2021-01-02 00:00:00.000  2021-01-02 00:00:00.000
+3           2021-01-03 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-03 00:00:00.000  2021-01-03 00:00:00.000  2021-01-03 00:00:00.000  2021-01-03 00:00:00.000  2021-01-03 00:00:00.000  2021-01-03 00:00:00.000
+4           2021-01-06 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-03 00:00:00.000  2021-01-06 00:00:00.000  2021-01-06 00:00:00.000  2021-01-06 00:00:00.000  2021-01-06 00:00:00.000  2021-01-06 00:00:00.000
+5           2021-01-11 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-01 00:00:00.000  2021-01-10 00:00:00.000  2021-01-11 00:00:00.000  2021-01-11 00:00:00.000  2021-01-11 00:00:00.000  2021-01-11 00:00:00.000  2021-01-11 00:00:00.000
+(5 rows affected)
+</code></pre></div>
+<p>同样注意周的起始时间点：</p>
+<ul>
+<li>在 SQL Server 中，一周的起始时间点是周日</li>
+<li>要想把一周的起始时间点调整为周一，那么我们可以在 <code>DATETRUNC(WEEK, date)</code> 的基础上再加上 1 天的时间：<code>DATEADD(DAY, 1, DATETRUNC(WEEK, date))</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">OriginalWeekStart</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 原值</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">DATETRUNC</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">AdjustedWeekStart</span><span class="w"> </span><span class="c1">-- 调整后值</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>========================================
+
+OriginalWeekStart  AdjustedWeekStart
+-----------------  -----------------
+2024-12-29         2024-12-30       
+(1 row affected)
+</code></pre></div>
+<h3 id="4">(4) 日期时间的加减运算<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p>在 SQL 中，我们可以使用 <code>DATEADD(part, number, date)</code> 函数来对日期时间进行加减运算：</p>
+<ul>
+<li>
+<p>举一个具体的例子，假设我们有一个日期时间 <code>2024-12-31 10:12:30.567</code>：</p>
+<ul>
+<li>我们想要在这个日期时间的基础上加上 1 年，那么我们就可以使用 <code>DATEADD(YEAR, 1, '2024-12-31 10:12:30.567')</code> 来实现这个功能，这个函数会返回 <code>2025-12-31 10:12:30.567</code></li>
+<li>如果在这个日期时间的基础上减去 2 个月，那么我们就可以使用 <code>DATEADD(MONTH, -2, '2024-12-31 10:12:30.567')</code> 来实现这个功能，这个函数会返回 <code>2024-10-31 10:12:30.567</code></li>
+</ul>
+</li>
+<li>
+<p>这个函数中 <code>part</code> 参数用来指定要加减的部分，常见的部分有：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>part</th>
+<th>等价缩写</th>
+<th>描述</th>
+<th>举例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YEAR</code></td>
+<td><code>yy</code> 或 <code>yyyy</code></td>
+<td>按年加减</td>
+<td><code>DATEADD(YEAR, 1, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2025-12-31 10:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>QUARTER</code></td>
+<td><code>qq</code> 或 <code>q</code></td>
+<td>按季度加减</td>
+<td><code>DATEADD(QUARTER, -1, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2024-09-30 10:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MONTH</code></td>
+<td><code>mm</code> 或 <code>m</code></td>
+<td>按月加减</td>
+<td><code>DATEADD(MONTH, 2, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2025-02-28 10:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WEEK</code></td>
+<td><code>wk</code> 或 <code>ww</code></td>
+<td>按周加减</td>
+<td><code>DATEADD(WEEK, -1, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2024-12-24 10:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DAY</code></td>
+<td><code>dd</code> 或 <code>d</code></td>
+<td>按日加减</td>
+<td><code>DATEADD(DAY, 3, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2025-01-03 10:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>HOUR</code></td>
+<td><code>hh</code></td>
+<td>按小时加减</td>
+<td><code>DATEADD(HOUR, -5, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2024-12-31 05:12:30.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MINUTE</code></td>
+<td><code>mi</code> 或 <code>n</code></td>
+<td>按分钟加减</td>
+<td><code>DATEADD(MINUTE, 15, '2024-12-31 10:12:30.567') 的结果是</code>2024-12-31 10:27:30.567`</td>
+<td></td>
+</tr>
+<tr>
+<td><code>SECOND</code></td>
+<td><code>ss</code> 或 <code>s</code></td>
+<td>按秒加减</td>
+<td><code>DATEADD(SECOND, -30, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2024-12-31 10:12:00.567</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MILLISECOND</code></td>
+<td><code>ms</code></td>
+<td>按毫秒加减</td>
+<td><code>DATEADD(MILLISECOND, 500, '2024-12-31 10:12:30.567')</code> 的结果是 <code>2024-12-31 10:12:31.067</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我们在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上使用 <code>DATEADD</code> 函数来进行日期时间的加减运算：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">NextYear</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上加上 1 年</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="n">QUARTER</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">PreviousQuarter</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上减去 1 个季度</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TwoMonthsLater</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上加上 2 个月</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="n">WEEK</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">OneWeekEarlier</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上减去 1 周</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ThreeDaysLater</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上加上 3 天</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="n">HOUR</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FiveHoursEarlier</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上减去 5 小时</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">MINUTE</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FifteenMinutesLater</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上加上 15 分钟</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="k">SECOND</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ThirtySecondsEarlier</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上减去 30 秒</span>
+<span class="w">    </span><span class="n">DATEADD</span><span class="p">(</span><span class="n">MILLISECOND</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FiveHundredMillisecondsLater</span><span class="w"> </span><span class="c1">-- 在发票日期的基础上加上 500 毫秒</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>=========================================================================================================================================================================================================================================================================
+
+InvoiceId   InvoiceDate              NextYear                 PreviousQuarter          TwoMonthsLater           OneWeekEarlier           ThreeDaysLater           FiveHoursEarlier         FifteenMinutesLater      ThirtySecondsEarlier     FiveHundredMillisecondsLater
+----------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  -----------------------  ----------------------------
+1           2021-01-01 00:00:00.000  2022-01-01 00:00:00.000  2020-10-01 00:00:00.000  2021-03-01 00:00:00.000  2020-12-25 00:00:00.000  2021-01-04 00:00:00.000  2020-12-31 19:00:00.000  2021-01-01 00:15:00.000  2020-12-31 23:59:30.000  2021-01-01 00:00:00.500     
+2           2021-01-02 00:00:00.000  2022-01-02 00:00:00.000  2020-10-02 00:00:00.000  2021-03-02 00:00:00.000  2020-12-26 00:00:00.000  2021-01-05 00:00:00.000  2021-01-01 19:00:00.000  2021-01-02 00:15:00.000  2021-01-01 23:59:30.000  2021-01-02 00:00:00.500     
+3           2021-01-03 00:00:00.000  2022-01-03 00:00:00.000  2020-10-03 00:00:00.000  2021-03-03 00:00:00.000  2020-12-27 00:00:00.000  2021-01-06 00:00:00.000  2021-01-02 19:00:00.000  2021-01-03 00:15:00.000  2021-01-02 23:59:30.000  2021-01-03 00:00:00.500     
+4           2021-01-06 00:00:00.000  2022-01-06 00:00:00.000  2020-10-06 00:00:00.000  2021-03-06 00:00:00.000  2020-12-30 00:00:00.000  2021-01-09 00:00:00.000  2021-01-05 19:00:00.000  2021-01-06 00:15:00.000  2021-01-05 23:59:30.000  2021-01-06 00:00:00.500     
+5           2021-01-11 00:00:00.000  2022-01-11 00:00:00.000  2020-10-11 00:00:00.000  2021-03-11 00:00:00.000  2021-01-04 00:00:00.000  2021-01-14 00:00:00.000  2021-01-10 19:00:00.000  2021-01-11 00:15:00.000  2021-01-10 23:59:30.000  2021-01-11 00:00:00.500     
+(5 rows affected)
+</code></pre></div>
+<h3 id="5">(5) 日期时间的差值计算<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p>在 SQL 中，我们还可以使用 <code>DATEDIFF(part, start_date, end_date)</code> 函数来计算两个日期时间之间的差值：</p>
+<ul>
+<li>这个函数会返回一个整数，表示 <code>start_date</code> 和 <code>end_date</code> 之间相差的 <code>part</code> 的数量</li>
+<li>
+<p>例如，假设我们有两个日期时间 <code>2024-12-31 10:12:30.567</code> 和 <code>2025-01-15 15:30:45.123</code>：</p>
+<ul>
+<li>如果我们想要计算这两个日期时间之间相差的天数，那么我们就可以使用 <code>DATEDIFF(DAY, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 来实现这个功能，这个函数会返回 <code>15</code></li>
+<li>如果我们想要计算这两个日期时间之间相差的小时数，那么我们就可以使用 <code>DATEDIFF(HOUR, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 来实现这个功能，这个函数会返回 <code>375</code></li>
+</ul>
+</li>
+<li>
+<p>这个函数中 <code>part</code> 参数用来指定要计算差值的部分，常见的部分有：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>part</th>
+<th>等价缩写</th>
+<th>描述</th>
+<th>举例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YEAR</code></td>
+<td><code>yy</code> 或 <code>yyyy</code></td>
+<td>按年计算差值</td>
+<td><code>DATEDIFF(YEAR, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123') 的结果是</code>1`</td>
+<td></td>
+</tr>
+<tr>
+<td><code>QUARTER</code></td>
+<td><code>qq</code> 或 <code>q</code></td>
+<td>按季度计算差值</td>
+<td><code>DATEDIFF(QUARTER, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MONTH</code></td>
+<td><code>mm</code> 或 <code>m</code></td>
+<td>按月计算差值</td>
+<td><code>DATEDIFF(MONTH, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WEEK</code></td>
+<td><code>wk</code> 或 <code>ww</code></td>
+<td>按周计算差值</td>
+<td><code>DATEDIFF(WEEK, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果 是 <code>2</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DAY</code></td>
+<td><code>dd</code> 或 <code>d</code></td>
+<td>按日计算差值</td>
+<td><code>DATEDIFF(DAY, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>15</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>HOUR</code></td>
+<td><code>hh</code></td>
+<td>按小时计算差值</td>
+<td><code>DATEDIFF(HOUR, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>375</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MINUTE</code></td>
+<td><code>mi</code> 或 <code>n</code></td>
+<td>按分钟计算差值</td>
+<td><code>DATEDIFF(MINUTE, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>22530</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SECOND</code></td>
+<td><code>ss</code> 或 <code>s</code></td>
+<td>按秒计算差值</td>
+<td><code>DATEDIFF(SECOND, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>1351800</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MILLISECOND</code></td>
+<td><code>ms</code></td>
+<td>按毫秒计算差值</td>
+<td><code>DATEDIFF(MILLISECOND, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 的结果是 <code>1351800567</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>这里要注意一点：</p>
+<ul>
+<li>
+<p>首先，<code>DATEDIFF</code> 函数计算差值的时候，是先提取两个日期时间的 <code>part</code> 部分，然后再计算这两个部分之间的差值，例如：</p>
+<ul>
+<li>如果我们使用 <code>DATEDIFF(YEAR, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 来计算这两个日期时间之间相差的年数，那么它会先提取出这两个日期时间的年份部分，分别是 <code>2024</code> 和 <code>2025</code>，然后再计算这两个年份之间的差值，结果就是 <code>1</code></li>
+<li>如果我们使用 <code>DATEDIFF(MONTH, '2024-12-31 10:12:30.567', '2025-01-15 15:30:45.123')</code> 来计算这两个日期时间之间相差的月数，那么它会先提取出这两个日期时间的月份部分，分别是 <code>2024-12</code> 和 <code>2025-01</code>，然后再计算这两个月份之间的差值，结果也是 <code>1</code></li>
+</ul>
+</li>
+<li>
+<p>其次，如果想算某个日期时间与当前时间之间的差值，那么我们就可以在 <code>DATEDIFF</code> 函数中直接使用 <code>CURRENT_TIMESTAMP</code> 来获取当前时间</p>
+</li>
+</ul>
+<p>我们来在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上使用 <code>DATEDIFF</code> 函数来计算发票日期与当前日期之间的差值：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="k">YEAR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">YearsSinceInvoice</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的年数</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="k">MONTH</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MonthsSinceInvoice</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的月数</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="k">DAY</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">DaysSinceInvoice</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的天数</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="n">HOUR</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">HoursSinceInvoice</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的小时数</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="k">MINUTE</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MinutesSinceInvoice</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的分钟数</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="k">SECOND</span><span class="p">,</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">SecondsSinceInvoice</span><span class="w"> </span><span class="c1">-- 计算发票日期与当前日期之间相差的秒数</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>=========================================================================================================================================================
+
+InvoiceId   InvoiceDate              YearsSinceInvoice  MonthsSinceInvoice  DaysSinceInvoice  HoursSinceInvoice  MinutesSinceInvoice  SecondsSinceInvoice
+----------  -----------------------  -----------------  ------------------  ----------------  -----------------  -------------------  -------------------
+1           2021-01-01 00:00:00.000  5                  62                  1903              45678              2740696              164441809          
+2           2021-01-02 00:00:00.000  5                  62                  1902              45654              2739256              164355409          
+3           2021-01-03 00:00:00.000  5                  62                  1901              45630              2737816              164269009          
+4           2021-01-06 00:00:00.000  5                  62                  1898              45558              2733496              164009809          
+5           2021-01-11 00:00:00.000  5                  62                  1893              45438              2726296              163577809          
+(5 rows affected)
+;
+</code></pre></div>
+<h3 id="6">(6) 日期时间的格式化<a class="headerlink" href="#6" title="Permanent link">&para;</a></h3>
+<p>时间日期的格式化是指将一个日期时间类型的值转换成一个特定格式的字符串：</p>
+<ul>
+<li>
+<p>例如，我们有一个日期时间 <code>2024-12-31 10:12:30.567</code>，我们想要将它格式化成以下几种不同的字符串格式：</p>
+<ul>
+<li>如果我们想要将它格式化成 <code>'YYYY-MM-DD'</code> 的格式，那么我们就可以得到 <code>2024-12-31</code></li>
+<li>如果我们想要将它格式化成 <code>'MM/DD/YYYY'</code> 的格式，那么我们就可以得到 <code>12/31/2024</code></li>
+<li>如果我们想要将它格式化成 <code>'DD MMM YYYY'</code> 的格式，那么我们就可以得到 <code>31 Dec 2024</code></li>
+</ul>
+</li>
+<li>
+<p>在 Azure SQL Database 中，我们可以使用 <code>FORMAT(date, format_string)</code> 函数来进行日期时间的格式化</p>
+</li>
+<li>
+<p>在 <code>format_string</code> 参数中，我们可以使用以下的一些格式化符号来指定我们想要的日期时间格式，我们拿 <code>2024-12-31 10:12:30.567</code> 这个日期时间来举例说明这些格式化符号的含义：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>举例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>yyyy</code></td>
+<td>四位数的年份</td>
+<td><code>2024</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>yy</code></td>
+<td>两位数的年份</td>
+<td><code>24</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MM</code></td>
+<td>两位数的月份</td>
+<td><code>12</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MMM</code></td>
+<td>月份缩写</td>
+<td><code>Dec</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MMMM</code></td>
+<td>月份全称</td>
+<td><code>December</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dd</code></td>
+<td>两位数的日期</td>
+<td><code>31</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ddd</code></td>
+<td>星期缩写</td>
+<td><code>Tue</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dddd</code></td>
+<td>星期全称</td>
+<td><code>Tuesday</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>HH</code></td>
+<td>两位数的小时（24 小时制）</td>
+<td><code>10</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>hh</code></td>
+<td>两位数的小时（12 小时制）</td>
+<td><code>10</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mm</code></td>
+<td>两位数的分钟</td>
+<td><code>12</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ss</code></td>
+<td>两位数的秒</td>
+<td><code>30</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>fff</code></td>
+<td>三位数的毫秒</td>
+<td><code>567</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我们在 <code>Invoice</code> 表中的 <code>InvoiceDate</code> 字段上使用 <code>FORMAT</code> 函数来进行日期时间的格式化：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span><span class="p">,</span>
+<span class="w">    </span><span class="n">FORMAT</span><span class="p">(</span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FormattedDate1</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 将发票日期格式化成 &#39;YYYY-MM-DD&#39; 的格式</span>
+<span class="w">    </span><span class="n">FORMAT</span><span class="p">(</span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;MM/dd/yyyy&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FormattedDate2</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 将发票日期格式化成 &#39;MM/DD/YYYY&#39; 的格式</span>
+<span class="w">    </span><span class="n">FORMAT</span><span class="p">(</span><span class="n">InvoiceDate</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dd MMM yyyy&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">FormattedDate3</span><span class="w"> </span><span class="c1">-- 将发票日期格式化成 &#39;DD MMM YYYY&#39; 的格式</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>===================================================================================
+
+InvoiceId   InvoiceDate              FormattedDate1  FormattedDate2  FormattedDate3
+----------  -----------------------  --------------  --------------  --------------
+1           2021-01-01 00:00:00.000  2021-01-01      01/01/2021      01 Jan 2021   
+2           2021-01-02 00:00:00.000  2021-01-02      01/02/2021      02 Jan 2021   
+3           2021-01-03 00:00:00.000  2021-01-03      01/03/2021      03 Jan 2021   
+4           2021-01-06 00:00:00.000  2021-01-06      01/06/2021      06 Jan 2021   
+5           2021-01-11 00:00:00.000  2021-01-11      01/11/2021      11 Jan 2021   
+(5 rows affected)
+</code></pre></div>
+<h3 id="7">(7) 时间日期的比较<a class="headerlink" href="#7" title="Permanent link">&para;</a></h3>
+<p>在 SQL 中，两个时间日期类型的值之间是可以进行比较的</p>
+<ul>
+<li>使用的就是比较运算符，除此之外还可以使用 <code>BETWEEN</code> 关键字来进行范围比较</li>
+<li>基本的逻辑也比较简单，历史比未来小，未来比历史大</li>
+<li>
+<p>例如：</p>
+<ul>
+<li><code>2024-12-31 10:12:30.567</code> 小于 <code>2025-01-01 00:00:00.000</code></li>
+<li><code>2024-12-31 10:12:30.567</code> 大于 <code>2024-12-30 23:59:59.999</code></li>
+<li><code>2024-12-31 10:12:30.567</code> 等于 <code>2024-12-31 10:12:30.567</code></li>
+<li><code>2024-12-31 10:12:30.567</code> 不等于 <code>2024-12-31 10:12:30.568</code></li>
+<li><code>2024-12-31 10:12:30.567</code> 在 <code>2024-12-30 00:00:00.000</code> 和 <code>2025-01-01 00:00:00.000</code> 之间</li>
+</ul>
+</li>
+</ul>
+<p>例如，我们筛选出 <code>Invoice</code> 表中发票日期在 <code>2021-01-01</code> 和 <code>2021-12-31</code> 之间的发票：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">DATEFROMPARTS</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">)</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>===================================
+
+InvoiceId   InvoiceDate            
+----------  -----------------------
+1           2021-01-01 00:00:00.000
+2           2021-01-02 00:00:00.000
+3           2021-01-03 00:00:00.000
+4           2021-01-06 00:00:00.000
+5           2021-01-11 00:00:00.000
+(5 rows affected)
+</code></pre></div>
+<p>但是，事实上，在大部分 SQL 数据库中，时间日期在比较的时候可以直接和字符串类型的日期时间进行比较，不需要使用 <code>DATEFROMPARTS</code> 函数来将字符串转换成日期时间类型，例如：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">&#39;2021-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">&#39;2021-12-31&#39;</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>===================================
+
+InvoiceId   InvoiceDate            
+----------  -----------------------
+1           2021-01-01 00:00:00.000
+2           2021-01-02 00:00:00.000
+3           2021-01-03 00:00:00.000
+4           2021-01-06 00:00:00.000
+5           2021-01-11 00:00:00.000
+(5 rows affected)
+</code></pre></div>
+<p>这里我们要额外注意一个问题，就是时间的颗粒度问题：</p>
+<ul>
+<li>例如我们如果想要找出 <code>2021-01-01</code> 这一天的发票，我们写 <code>WHERE InvoiceDate = '2021-01-01'</code> 是不行的</li>
+<li>因为这个条件其实是找出发票日期等于 <code>2021-01-01 00:00:00.000</code> 的发票，而不是找出发票日期在 <code>2021-01-01 00:00:00.000</code> 和 <code>2021-01-01 23:59:59.999</code> 之间的发票</li>
+<li>
+<p>因此，我们可以有以下一些写法来找出 <code>2021-01-01</code> 这一天的发票：</p>
+<ul>
+<li>使用 <code>BETWEEN</code> 关键字：<code>WHERE InvoiceDate BETWEEN '2021-01-01' AND '2021-01-01 23:59:59.999'</code></li>
+<li>使用比较运算符：<code>WHERE InvoiceDate &gt;= '2021-01-01' AND InvoiceDate &lt; '2021-01-02'</code>，这里的 <code>2021-01-02</code> 其实是 <code>2021-01-02 00:00:00.000</code></li>
+<li>使用 <code>DATETRUNC</code> 函数：<code>WHERE DATETRUNC(DAY, InvoiceDate) = '2021-01-01'</code></li>
+</ul>
+</li>
+<li>
+<p>我们随便使用一种方法来找出 <code>2021-01-01</code> 这一天的发票：</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">TOP</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="n">InvoiceId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">InvoiceDate</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Invoice</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2021-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">InvoiceDate</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">&#39;2021-01-02&#39;</span>
+<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>===================================
+
+InvoiceId   InvoiceDate            
+----------  -----------------------
+1           2021-01-01 00:00:00.000
+(1 row affected)
+</code></pre></div>
+<p>这里我们简单总结一下：时间日期对象在进行比较的时候，<strong>可以是时间日期类型的值，也可以是字符串类型的值</strong>，比较的时候要注意<strong>时间的颗粒度问题</strong>。</p>
+<h2 id="3_1">3. 日期时间操作小结<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h2>
+<p>到目前为止，我们已经介绍了 SQL 中的日期时间类型数据的各种操作，我们列个表做个总结：</p>
+<table>
+<thead>
+<tr>
+<th>操作类型</th>
+<th>函数名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取当前日期时间</td>
+<td><code>GETDATE()</code></td>
+<td>获取当前的日期和时间，格式为 <code>'YYYY-MM-DD HH:MM:SS.mmm'</code></td>
+</tr>
+<tr>
+<td>获取当前日期时间</td>
+<td><code>CURRENT_TIMESTAMP</code></td>
+<td>获取当前的日期和时间，格式同样为 <code>'YYYY-MM-DD HH:MM:SS.mmm'</code></td>
+</tr>
+<tr>
+<td>日期时间的部分提取</td>
+<td><code>DATEPART(part, date)</code></td>
+<td>从一个日期时间类型的字段中提取出年、月、日、小时、分钟、秒等等这些部分来，返回整数形式</td>
+</tr>
+<tr>
+<td>日期时间的部分提取</td>
+<td><code>DATENAME(part, date)</code></td>
+<td>从一个日期时间类型的字段中提取出年、月、日、小时、分钟、秒等等这些部分来，返回字符串形式</td>
+</tr>
+<tr>
+<td>日期时间的组合</td>
+<td><code>DATEFROMPARTS(year, month, day)</code></td>
+<td>将整数形式的日期时间部分组合成一个新的日期，这个函数会将小时、分钟、秒和毫秒 都设置为 0</td>
+</tr>
+<tr>
+<td>日期时间的组合</td>
+<td><code>DATETIMEFROMPARTS(year, month, day, hour, minute, second, millisecond)</code></td>
+<td>将整数形式的日期时间部分组合成一个新的日期时间</td>
+</tr>
+<tr>
+<td>日期时间的颗粒度截断</td>
+<td><code>DATETRUNC(part, date)</code></td>
+<td>将一个日期时间具体到某个颗粒度上进行截断，例如具体到年、月、日、小时等等</td>
+</tr>
+<tr>
+<td>日期时间的加减运算</td>
+<td><code>DATEADD(part, number, date)</code></td>
+<td>对日期时间进行加减运算</td>
+</tr>
+<tr>
+<td>日期时间的差值计算</td>
+<td><code>DATEDIFF(part, start_date, end_date)</code></td>
+<td>计算两个日期时间之间的差值</td>
+</tr>
+<tr>
+<td>日期时间的格式化</td>
+<td><code>FORMAT(date, format_string)</code></td>
+<td>将一个日期时间类型的值转换成一个特定格式的字符串</td>
+</tr>
+<tr>
+<td>日期时间的比较</td>
+<td>比较运算符与 <code>BETWEEN</code></td>
+<td>用于比较日期时间，可以是时间日期类型的值，也可以是字符串类型的值</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.expand", "navigation.tracking", "content.code.copy", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
